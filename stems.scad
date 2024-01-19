@@ -715,30 +715,32 @@ module _stem_round_cherry(key_height, key_length, key_width, dish_depth, dish_th
             if (key_rotation[0] != 0 || key_rotation[1] != 0) {
                 warning("If you're rotating the keycap you probably want STEM_SUPPORT=false (flat_support=false)");
             }
-            translate([0,0,-support_distance]) difference() { // Generate the little corner bits
-                translate([0,0,inset/2+support_distance/2])
-                    squarish_rpoly(xy=[length,width], h=inset-support_distance, r=corner_radius, center=true);
-                translate([0,0,inset/2])
-                    squarish_rpoly(xy=[length-extrusion_width*3,width-extrusion_width*3], h=inset+1, r=corner_radius, center=true);
-                translate([0,0,inset/2])
-                    cube([1,20,inset+1], center=true);
-                translate([0,0,inset/2])
-                    cube([20,1,inset+1], center=true);
-                translate([0,0,inset/2])
-                    rotate([0,0,45])
+            translate(location){
+                translate([0,0,-support_distance]) difference() { // Generate the little corner bits
+                    translate([0,0,inset/2+support_distance/2])
+                        squarish_rpoly(xy=[length,width], h=inset-support_distance, r=corner_radius, center=true);
+                    translate([0,0,inset/2])
+                        squarish_rpoly(xy=[length-extrusion_width*3,width-extrusion_width*3], h=inset+1, r=corner_radius, center=true);
+                    translate([0,0,inset/2])
+                        cube([1,20,inset+1], center=true);
+                    translate([0,0,inset/2])
                         cube([20,1,inset+1], center=true);
-                translate([0,0,inset/2])
-                    rotate([0,0,-45])
-                        cube([20,1,inset+1], center=true);
-            }
-            difference() { // Generate the center bit
-                cylinder(d=3.5, h=inset-support_distance, $fn=32);
-                cylinder(d=1.85, h=inset*4, center=true, $fn=32);
-            }
-            // Add a flat thing at the bottom that makes it easy to pull the supports off
-            translate([0,0,inset/4]) difference() {
-                cube([support_dia,support_dia,inset/2], center=true);
-                cylinder(d=3, h=inset/2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
+                    translate([0,0,inset/2])
+                        rotate([0,0,45])
+                            cube([20,1,inset+1], center=true);
+                    translate([0,0,inset/2])
+                        rotate([0,0,-45])
+                            cube([20,1,inset+1], center=true);
+                }
+                difference() { // Generate the center bit
+                    cylinder(d=3.5, h=inset-support_distance, $fn=32);
+                    cylinder(d=1.85, h=inset*4, center=true, $fn=32);
+                }
+                // Add a flat thing at the bottom that makes it easy to pull the supports off
+                translate([0,0,inset/4]) difference() {
+                    cube([support_dia,support_dia,inset/2], center=true);
+                    cylinder(d=3, h=inset/2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
+                }
             }
         }
         // Add side supports so you can print the keycap on its left or right sides
